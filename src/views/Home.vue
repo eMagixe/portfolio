@@ -37,21 +37,33 @@
         </div>
       </div>
     </div>      
-    <div class="columns" >
-        <div class="column" v-for="item in icons_info" :key="item.id">
+    <div class="columns">
+      <transition-group
+        appear
+        name="icon-fade"
+        
+        :css="false"
+        @before-enter="beforeEnter"
+        @enter="enter"
+        @leave="leave"
+      >
+        <div class="column" v-for="(item, index) in icons_info" :key="item.id" :data-index="index">
           <div class="cell-home">
             <i :class="`icofont-${item.icon} home-icons`"></i>
-           </div>
+            </div>
           <div class="cell-left-home has-text-centered">
             <h3 class="mb-3 mt-5">{{ item.title }}</h3>
             <p>{{ item.text }}</p>
           </div>
         </div>
+      </transition-group>
     </div>
   </div>
 </template>
 
 <script>
+import { gsap } from 'gsap';
+
 export default {
   setup() {
     let icons_info = [
@@ -79,8 +91,27 @@ export default {
         text: 'Важный аспект любого сайта это динамическое содержимое, статичные сайты это вчерашний день.',
         icon: 'rocket-alt-2'
       }
-    ]
-    return { icons_info };
+    ];
+
+    const beforeEnter = (el) => {
+      el.style.opacity = 0;
+    }
+    const enter = (el, done) => {
+      gsap.to(el, {
+        opacity: 1,
+        duration: 2,
+        delay: el.dataset.index * 0.25,
+        onConplete: done
+      });
+    }
+    const leave = (el, done) => {
+      gsap.to(el, {
+        opacity: 0,
+        delay: el.dataset.index * 0.15,
+        onConplete: done
+      });
+    }
+    return { beforeEnter, enter, leave, icons_info };
   }
 
 }

@@ -35,8 +35,12 @@ export default {
 .contacts {
   font-size: 1.2rem;
 }
+.contacts a {
+  vertical-align: super;
+  margin-left: 1rem;
+}
 .icon {
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: rgb(187, 187, 187);
 }
 
